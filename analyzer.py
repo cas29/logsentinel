@@ -28,7 +28,13 @@ def detect_bruteforce(attempts, threshold = 3):
 
 if __name__ == "__main__":
     lines = read_lines("samples/auth.log")
-    for ip, count in count_failed_logins(lines).most_common():
-        print(f"{ip}: {count} failed logins")
+    attempts = count_failed_logins(lines)
+    suspects = detect_bruteforce(attempts, threshold=3)
+
+    if not suspects:
+        print('No brute-force attacks detected.')
+
+    for ip, count in sorted(suspects.items(), key=lambda x : -x[1]):
+        print(f'[ALERT] Possible brute force from {ip}: {count} failed logins')
     
 
