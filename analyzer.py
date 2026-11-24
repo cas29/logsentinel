@@ -22,6 +22,10 @@ def count_failed_logins(lines):
             attemps[ip] +=1
     return attemps
 
+def detect_bruteforce(attempts, threshold = 3):
+    """Return only the IPs with at least `threshold` failed logins."""
+    return {ip: count for ip, count in attempts.items() if count >= threshold}
+
 if __name__ == "__main__":
     lines = read_lines("samples/auth.log")
     for ip, count in count_failed_logins(lines).most_common():
